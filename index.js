@@ -117,9 +117,14 @@ app.get("/api/users/:_id/logs", (req, res) => {
     if (log.length !== 0) count = log.length;
 
     log.forEach((element, i) => {
-      newLog.push(element);
-      newLog[i].date = new Date(element.date).toDateString();
-      console.log(new Date(element.date));
+      if (from && element.date >= from && element.date <= to) {
+        newLog.push(element);
+        newLog[i].date = new Date(element.date).toDateString();
+      }
+      if (!from) {
+        newLog.push(element);
+        newLog[i].date = new Date(element.date).toDateString();
+      }
     });
     console.log(newLog);
     const userData = {

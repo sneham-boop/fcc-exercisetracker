@@ -112,21 +112,21 @@ app.get("/api/users/:_id/logs", (req, res) => {
     let newLog = [];
     let count = 0;
 
-    log.forEach((element, i) => {
-      const exDate = new Date(element.date).getTime(); 
-      if (from && exDate >= from && exDate <= to) {
-        newLog.push(element);
-        newLog[i].date = new Date(element.date).toDateString();
-      }
-      if (!from) {
-        newLog.push(element);
-        newLog[i].date = new Date(element.date).toDateString();
-      }
-    });
-    
-    if (limit) newLog=newLog.slice(0, limit);
+    if (log.length !== 0) {
+      log.forEach((element, i) => {
+        const exDate = new Date(element.date).getTime();
+        if (from && exDate >= from && exDate <= to) {
+          newLog.push({...element, date: new Date(element.date).toDateString()});
+        }
+        if (!from) {
+          newLog.push(element);
+          newLog[i].date = new Date(element.date).toDateString();
+        }
+      });
+    }
+
+    if (limit) newLog = newLog.slice(0, limit);
     count = newLog.length;
-    // console.log(newLog);
     const userData = {
       ...user,
       log: newLog,

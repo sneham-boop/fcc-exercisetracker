@@ -111,7 +111,6 @@ app.get("/api/users/:_id/logs", (req, res) => {
     let log = [...user.log];
     let newLog = [];
     let count = 0;
-    if (log.length !== 0) count = log.length;
 
     log.forEach((element, i) => {
       const exDate = new Date(element.date).getTime(); 
@@ -126,7 +125,8 @@ app.get("/api/users/:_id/logs", (req, res) => {
     });
     
     if (limit) newLog=newLog.slice(0, limit);
-    console.log(newLog);
+    count = newLog.length;
+    // console.log(newLog);
     const userData = {
       ...user,
       log: newLog,

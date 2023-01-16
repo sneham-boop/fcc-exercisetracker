@@ -95,16 +95,13 @@ app.post("/api/users/:_id/exercises", (req, res) => {
 //  Get /api/users/:_id/logs
 app.get("/api/users/:_id/logs", (req, res) => {
   const { _id } = req.params;
-  const { from, to, limit } = req.query;
+  let { from, to, limit } = req.query;
 
-  // const log = getLog(_id, from, to, limit);
-  // const exerciseCount = log.length;
-  // const user = {
-  //   ...users[_id],
-  //   count: exerciseCount,
-  //   log: log,
-  // };
-  // res.send(user);
+  if (from) {
+    from = new Date(from).getTime();
+    to = new Date(to).getTime();
+  }
+
   User.findById({ _id }, (err, response) => {
     if (err) {
       console.log(err);
@@ -117,7 +114,8 @@ app.get("/api/users/:_id/logs", (req, res) => {
     if (log.length !== 0) count = log.length;
 
     log.forEach((element, i) => {
-      if (from && element.date >= from && element.date <= to) {
+      const exDate = new Date(element.date).getTime(); 
+      if (from && exDate >= from && exDate <= to) {
         newLog.push(element);
         newLog[i].date = new Date(element.date).toDateString();
       }

@@ -27,11 +27,26 @@ let User = mongoose.model('User', userSchema);
 
 app.use(cors())
 app.use(express.static('public'))
+app.use(bodyParser.urlencoded({ extended: false }))
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
 });
 
-
+// POST to /api/users 
+app.post("/api/users",(req, res)=>{
+  const { username } = req.body;
+  // const id = generateRandomID();
+  // users[id] = {username: username, _id: id};
+  const user = new User({username})
+  user.save((err, data) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    res.send(data);
+  })
+  // res.send(users[id]);
+});
 
 
 

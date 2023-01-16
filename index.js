@@ -109,7 +109,7 @@ app.get("/api/users/:_id/logs", (req, res) => {
     }
     const { _doc: user } = response;
     let log = [...user.log];
-    const newLog = [];
+    let newLog = [];
     let count = 0;
     if (log.length !== 0) count = log.length;
 

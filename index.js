@@ -35,8 +35,6 @@ app.get('/', (req, res) => {
 // POST to /api/users 
 app.post("/api/users",(req, res)=>{
   const { username } = req.body;
-  // const id = generateRandomID();
-  // users[id] = {username: username, _id: id};
   const user = new User({username})
   user.save((err, data) => {
     if (err) {
@@ -45,10 +43,19 @@ app.post("/api/users",(req, res)=>{
     }
     res.send(data);
   })
-  // res.send(users[id]);
 });
 
-
+// GET request to /api/users
+app.get("/api/users",(req, res)=>{
+  User.find((err,users)=>{
+      if (err) {
+      console.log(err);
+      return;
+      }
+    res.send(users);
+  })
+  
+});
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port)

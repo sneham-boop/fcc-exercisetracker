@@ -126,6 +126,8 @@ app.get("/api/users/:_id/logs", (req, res) => {
         newLog[i].date = new Date(element.date).toDateString();
       }
     });
+    
+    if (limit) newLog=newLog.slice(0, limit);
     console.log(newLog);
     const userData = {
       ...user,

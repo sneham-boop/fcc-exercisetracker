@@ -24,7 +24,7 @@ let userSchema = new Schema({
     {
       description: String,
       duration: Number,
-      date: Date,
+      date: String,
     },
   ],
 });
@@ -87,7 +87,6 @@ app.post("/api/users/:_id/exercises", (req, res) => {
         username: user.username,
         ...exercise,
       };
-      console.log(userData);
       res.send(userData);
     });
   });
@@ -106,18 +105,29 @@ app.get("/api/users/:_id/logs", (req, res) => {
   //   log: log,
   // };
   // res.send(user);
-  User.findById({ _id }, (err, user) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      let count = 0;
-      if (user.log.length !== 0) count=user.log.length;
-      const userData = {
-        ...user._doc,
-        count
-      };
-      res.send(userData);
+  User.findById({ _id }, (err, response) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    const { _doc: user } = response;
+    let log = [...user.log];
+    const newLog = [];
+    let count = 0;
+    if (log.length !== 0) count = log.length;
+
+    log.forEach((element, i) => {
+      newLog.push(element);
+      newLog[i].date = new Date(element.date).toDateString();
+      console.log(new Date(element.date));
+    });
+    console.log(newLog);
+    const userData = {
+      ...user,
+      log: newLog,
+      count,
+    };
+    res.send(userData);
   });
 });
 

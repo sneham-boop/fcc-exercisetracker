@@ -93,6 +93,34 @@ app.post("/api/users/:_id/exercises", (req, res) => {
   });
 });
 
+//  Get /api/users/:_id/logs
+app.get("/api/users/:_id/logs", (req, res) => {
+  const { _id } = req.params;
+  const { from, to, limit } = req.query;
+
+  // const log = getLog(_id, from, to, limit);
+  // const exerciseCount = log.length;
+  // const user = {
+  //   ...users[_id],
+  //   count: exerciseCount,
+  //   log: log,
+  // };
+  // res.send(user);
+  User.findById({ _id }, (err, user) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      let count = 0;
+      if (user.log.length !== 0) count=user.log.length;
+      const userData = {
+        ...user._doc,
+        count
+      };
+      res.send(userData);
+  });
+});
+
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log("Your app is listening on port " + listener.address().port);
 });
